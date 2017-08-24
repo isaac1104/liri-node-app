@@ -1,15 +1,33 @@
-var request = require("request");
+var keys = require("./key");
+var Spotify = require("node-spotify-api");
+var Twitter = require("twitter");
 var userRequest = process.argv[2];
 var value = process.argv[3];
 
 if (userRequest === "movie-this") {
   movieData(value);
-} else if (userRequest === "spotify-this") {
+} else if (userRequest === "spotify-this-song") {
   songData(value);
+} else if (userRequest === "my-tweets") {
+  twitterData();
+}
+
+//Get data from twitter
+function twitterData() {
+  var myTweets = { screen_name: "isaac3532"};
+  var client = new Twitter(keys.twitterKeys);
+  client.get("statuses/user_timeline", myTweets, function(error, tweets, response) {
+    if (!error && response.statusCode === 200) {
+      var allTweets = tweets.forEach(function(tweet, index) {
+        console.log(index + 1, tweet.text);
+      });
+    }
+  });
 }
 
 //Get movie data from OMDB
 function movieData(value) {
+  var request = require("request");
   if (value === "" || value === undefined) {
     value = "Mr.Nobody";
   }
@@ -31,13 +49,9 @@ function movieData(value) {
 
 //Get song data from Spotify
 function songData(value) {
-  var id = "7203388ac6904e96a4dc5c0408e3373b";
-  var secret = "af2b85c8648c435a8a609b33d52b2b0d";
-  var queryUrl = "https://api.spotify.com/v1/search?q" + value + "&type=track";
-  request(queryUrl, function(error, response, body) {
-    if (!error && response.statusCode === 200) {
-      var songData = JSON.parse(body);
-      console.log(songData);
-    }
+  var spotify = new Spotify({
+    id: "7203388ac6904e96a4dc5c0408e3373b",
+    secret: "af2b85c8648c435a8a609b33d52b2b0d"
   });
+  console.log(spotify);
 }
