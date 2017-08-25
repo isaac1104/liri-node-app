@@ -40,11 +40,9 @@ function twitterData() {
 //Get movie data from OMDB
 function movieData(value) {
   var request = require("request");
-
   if (value === "" || value === undefined) {
     value = "Mr.Nobody";
   }
-
   var queryUrl = "http://www.omdbapi.com/?t=" + value + "&y=&plot=short&apikey=40e9cece";
   request(queryUrl, function(error, response, body) {
     var movieData = JSON.parse(body);
@@ -58,6 +56,11 @@ function movieData(value) {
       console.log("Plot: " + movieData.Plot);
       console.log("Actors: " + movieData.Actors);
     }
+    fs.appendFile("./log.txt", "<-------- OMDB Log -------->" + "\r\nTitle: " + movieData.Title + "\r\nRelease Year: " + movieData.Year + "\r\nIMDB Rating: " + movieData.imdbRating + "\r\nRotten Tomatoes Rating: " + movieData.Ratings[1].Value + "\r\nProduced In: " + movieData.Language + "\r\nPlot: " + movieData.Plot + "\r\nActors: " + movieData.Actors + "\r\n" + "<----- End of OMDB Log ----->" + "\r\n" + "\r\n", function(error) {
+      if (error) {
+        return console.log(error);
+      }
+    });
   });
 }
 
@@ -67,11 +70,9 @@ function songData(value) {
     id: "7203388ac6904e96a4dc5c0408e3373b",
     secret: "af2b85c8648c435a8a609b33d52b2b0d"
   });
-
   if (value === "" || value === undefined) {
     value = "The Sign";
   }
-
   spotify.search({
       type: 'track',
       query: value + "&limit=1&",
@@ -83,5 +84,10 @@ function songData(value) {
         console.log("Preview URL: " + data.tracks.items[0].preview_url);
         console.log("Album: " + data.tracks.items[0].album.name);
       }
+      fs.appendFile("./log.txt", "<-------- Spotify Log -------->" + "\r\nArtist: " + data.tracks.items[0].artists[0].name + "\r\nTitle: " + data.tracks.items[0].name + "\r\nPreview URL: " + data.tracks.items[0].preview_url + "\r\nAlbum: " + data.tracks.items[0].album.name + "\r\n" + "<----- End of Spotify Log ----->" + "\r\n" + "\r\n", function(error) {
+        if (error) {
+          return console.log(error);
+        }
+      });
     });
 }
