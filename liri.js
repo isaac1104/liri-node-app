@@ -109,6 +109,10 @@ function doWhatItSays() {
       var split = data.split(",");
       if (split[0] === "spotify-this-song") {
         songData(split[1]);
+      } else if (split[0] === "movie-this") {
+        movieData(split[1]);
+      } else if (split[0] === "my-tweets") {
+        twitterData();
       }
     }
   });
