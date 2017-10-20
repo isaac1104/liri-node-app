@@ -48,7 +48,7 @@ function twitterData() {
 //Get movie data from OMDB
 function movieData(value) {
   var request = require("request");
-  if (value === "" || value === undefined) {
+  if (value === "" || value === undefined || value == null) {
     value = "Mr.Nobody";
   }
   var queryUrl = "http://www.omdbapi.com/?t=" + value + "&y=&plot=short&apikey=40e9cece";
